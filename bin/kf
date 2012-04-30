@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'kp_folder'
+
+case ARGV[0]
+when '-a'
+  KpFolder.init
+  if ARGV[1] && File.exist?(ARGV[1]) && File.directory?(ARGV[1])
+    KpFolder.add(File.absolute_path(ARGV[1])) # trip trailing '/'
+  end  
+when '-rm'
+  KpFolder.init
+  if ARGV[1] && File.exist?(ARGV[1]) && File.directory?(ARGV[1])
+    KpFolder.remove(File.absolute_path(ARGV[1])) # trip trailing '/'
+  end
+when '-s'
+  KpFolder.init
+  if ARGV[1]
+    KpFolder.start ARGV[1]
+  else
+    KpFolder.start
+  end
+when '--help'
+  puts "kf -a folder : add a folder"
+  puts "kf -rm folder : remove a folder"
+else
+  puts 'wrong params!please refer to help:kp --help'
+end
