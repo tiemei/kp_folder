@@ -40,5 +40,5 @@ when '--help'
         1 kf -a /home/tom/Documents
         2 kf -s"
 else
-  puts 'wrong params!please refer to help:kp --help'
+  puts 'wrong params!please refer to help:kf --help'
 end

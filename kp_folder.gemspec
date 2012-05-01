@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'kp_folder'
-  s.version = '0.0.3'
+  s.version = '0.0.4'
   s.executables << 'kf'
   s.date = '2012-05-01'
   s.summary = "kuaipan sync folder command tool"
