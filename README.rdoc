@@ -1,11 +1,11 @@
 = kp_folder
 
-kuaipan sync folders tool
-To install then command tool:
+A kuaipan sync folders tool. By it, you can sync local folders to kuaipan. And,if you remove or modify the local files, these files will be correctly handled!
+To install it:
 
   gem install kp_folder
 
-commands:
+Commands used in your terminal:
   kf --help    # help doc
   kf -a yourfolder_absolute_path # add a folder to sync
   kf -rm yourfolder_absolute_ath # remove a folder
