@@ -2,6 +2,7 @@
 
 require 'kp_folder'
 require 'test/unit'
+require 'uri'
 
 class KpFolderTest < Test::Unit::TestCase
   def test_init

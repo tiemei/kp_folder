@@ -12,7 +12,7 @@ module KpFolder
     attr_reader :k_session
   end
   def self.init
-    @oauth_result_file = '.oauth_result.json'
+    @oauth_result_file = "#{ Dir.home }/.kf_oauth_result.json"
     input_config(Config.consumer_key, Config.consumer_secret) 
     @k_session = nil
     if File.exist?(@oauth_result_file)
@@ -33,10 +33,17 @@ module KpFolder
         f.write(JSON.generate(oauth_result))
       end
     end
-    @folders_file = '.folders_upload'
-    @db_file = '.db'
+    @folders_file = "#{ Dir.home }/.kf_folders"
+    @db_file = "#{ Dir.home }/.kf_db"
     File.open(@folders_file, 'w'){|f| f.write('[]')} unless File.exist?(@folders_file)
     File.open(@db_file, 'w'){|f| f.write('{}')} unless File.exist?(@db_file)
+  end
+
+  def self.list
+    File.open(@folders_file, 'r')do |f|
+      arr = JSON.parse(f.read)
+      arr.each {|item| puts item}
+    end
   end
 
   def self.remove(folder)
@@ -69,8 +76,8 @@ module KpFolder
 
   # 1.upload local files that aren't in file '.db',and update .db
   # 2.clear remote files
-  def self.start(filter=".*")
-    filter = Regexp.compile(filter)
+  def self.start(opts={})
+    filter = Regexp.compile(filter) if (filter = opts.delete(:filter))
     @local_files = []
     File.open(@folders_file, 'r'){|f| @folders = JSON.parse(f.read)}
     @folders.each do |folder|
@@ -82,7 +89,7 @@ module KpFolder
     end
     @db_tmp = {}
     @local_files.each do |file_name|
-      next if filter =~ File.basename(file_name)
+      next if filter && (filter =~ File.basename(file_name))
       m = %r{/.*/}.match(file_name)
       file = File.open(file_name, 'rb')
       if @db[file_name] == nil 
@@ -109,7 +116,7 @@ module KpFolder
     diff = @files_remote.select {|k,_| @db[k] == nil }
     diff.each do |k,_| 
       k_session.delete(k) 
-      p "clear remote file: \t#{ k }"
+      puts "clear remote file: \t#{ k }"
     end
   end
 

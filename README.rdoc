@@ -6,10 +6,11 @@ To install then command tool:
   gem install kp_folder
 
 commands:
-  kp --help # help doc
+  kp --help    # help doc
   kp -a yourfolder_absolute_path # add a folder to sync
   kp -rm yourfolder_absolute_ath # remove a folder
-  kp -s # start sync all folders
+  kp -s        # start sync all folders to kuaipan
   kp -s ^\\..* # filter some files whose name start by '.'. You can give other regex str
+  kp -l        # list all folders added
 
 

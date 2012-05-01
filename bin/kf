@@ -2,27 +2,43 @@
 
 require 'kp_folder'
 
-case ARGV[0]
+case ARGV.shift
 when '-a'
+  arg1 = ARGV.shift if ARGV[0]
+  ARGV.clear
   KpFolder.init
-  if ARGV[1] && File.exist?(ARGV[1]) && File.directory?(ARGV[1])
-    KpFolder.add(File.absolute_path(ARGV[1])) # trip trailing '/'
+  if arg1 && File.exist?(arg1) && File.directory?(arg1)
+    KpFolder.add(File.absolute_path(arg1)) # trip trailing '/'
   end  
 when '-rm'
+  arg1 = ARGV.shift if ARGV[0]
+  ARGV.clear
   KpFolder.init
-  if ARGV[1] && File.exist?(ARGV[1]) && File.directory?(ARGV[1])
-    KpFolder.remove(File.absolute_path(ARGV[1])) # trip trailing '/'
+  if arg1 && File.exist?(arg1) && File.directory?(arg1)
+    KpFolder.remove(File.absolute_path(arg1)) # trip trailing '/'
   end
 when '-s'
+  arg1 = ARGV.shift if ARGV[0]
+  ARGV.clear
   KpFolder.init
-  if ARGV[1]
-    KpFolder.start ARGV[1]
+  if arg1
+    KpFolder.start(:filter => arg1)
   else
     KpFolder.start
   end
+when '-l'
+  ARGV.clear
+  KpFolder.init
+  KpFolder.list 
 when '--help'
-  puts "kf -a folder : add a folder"
+  puts "kf -i         : init firstly"
+  puts "kf -a  folder : add a folder"
   puts "kf -rm folder : remove a folder"
+  puts "kf -s         : start to sync all folders"
+  puts "kf -l         : list all folders which were added"
+  puts "a simple example, that will sync all files in folder '/home/tom/Documents':
+        1 kf -a /home/tom/Documents
+        2 kf -s"
 else
   puts 'wrong params!please refer to help:kp --help'
 end
