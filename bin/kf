@@ -31,7 +31,6 @@ when '-l'
   KpFolder.init
   KpFolder.list 
 when '--help'
-  puts "kf -i         : init firstly"
   puts "kf -a  folder : add a folder"
   puts "kf -rm folder : remove a folder"
   puts "kf -s         : start to sync all folders"
