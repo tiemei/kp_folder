@@ -1,43 +1,32 @@
 #!/usr/bin/env ruby
 
 require 'kp_folder'
+require 'optparse'
 
-case ARGV.shift
-when '-a'
-  arg1 = ARGV.shift if ARGV[0]
-  ARGV.clear
-  KpFolder.init
-  if arg1 && File.exist?(arg1) && File.directory?(arg1)
-    KpFolder.add(File.absolute_path(arg1)) # trip trailing '/'
-  end  
-when '-rm'
-  arg1 = ARGV.shift if ARGV[0]
-  ARGV.clear
-  KpFolder.init
-  if arg1 && File.exist?(arg1) && File.directory?(arg1)
-    KpFolder.remove(File.absolute_path(arg1)) # trip trailing '/'
+option_parser = OptionParser.new do |opts|
+  opts.banner = "Help message of cmd line tool 'kf':"
+  
+  opts.on('-a folder', '--add folder', 'Add a foler') do |v|
+    KpFolder.init
+    if v && File.exist?(v) && File.directory?(v)
+      KpFolder.add(File.absolute_path(v)) # trip trailing '/'
+    end  
   end
-when '-s'
-  arg1 = ARGV.shift if ARGV[0]
-  ARGV.clear
-  KpFolder.init
-  if arg1
-    KpFolder.start(:filter => arg1)
-  else
+
+  opts.on('-rm folder', '--remove folder', 'Remove a foler') do |v|
+    KpFolder.init
+    if v && File.exist?(v) && File.directory?(v)
+      KpFolder.remove(File.absolute_path(v)) # trip trailing '/'
+    end
+  end
+
+  opts.on('-l', '--list', 'List all folders which were added') do 
+    KpFolder.init
+    KpFolder.list 
+  end
+
+  opts.on('-s', '--start', 'Start to sync all folers') do 
+    KpFolder.init
     KpFolder.start
   end
-when '-l'
-  ARGV.clear
-  KpFolder.init
-  KpFolder.list 
-when '--help'
-  puts "kf -a  folder : add a folder"
-  puts "kf -rm folder : remove a folder"
-  puts "kf -s         : start to sync all folders"
-  puts "kf -l         : list all folders which were added"
-  puts "a simple example, that will sync all files in folder '/home/tom/Documents':
-        1 kf -a /home/tom/Documents
-        2 kf -s"
-else
-  puts 'wrong params!please refer to help:kf --help'
-end
+end.parse!
